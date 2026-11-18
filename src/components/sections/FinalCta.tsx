@@ -22,7 +22,7 @@ export function FinalCta() {
         <h2
           id="buy-title"
           data-reveal="lines"
-          className="display mt-8 text-[clamp(4rem,17.5vw,17rem)]"
+          className="display mt-8 text-[clamp(3.25rem,15.5vw,15rem)]"
         >
           {finalCta.title.map((line) => (
             <span key={line} className="block">

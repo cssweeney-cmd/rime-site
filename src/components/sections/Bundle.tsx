@@ -59,7 +59,7 @@ export function Bundle() {
         setActive(panelAt(progress));
         fills.forEach((fill, i) => {
           const local = clamp01((progress - stops[i]) / (stops[i + 1] - stops[i]));
-          fill.style.transform = `scaleX(${local})`;
+          fill.style.scale = `${local} 1`;
         });
       };
       ScrollTrigger.create({
@@ -90,6 +90,11 @@ export function Bundle() {
       className="relative motion:h-[460vh]"
     >
       <div className="relative z-20 px-(--gutter) py-24 motion:sticky motion:top-0 motion:h-svh motion:overflow-clip motion:py-0">
+        <div
+          aria-hidden="true"
+          className="glow-cold pointer-events-none absolute inset-y-0 right-0 hidden w-3/5 motion:block max-md:inset-x-0 max-md:bottom-auto max-md:h-3/5 max-md:w-full"
+        />
+
         {/* Section label + progress */}
         <div className="motion:absolute motion:inset-x-(--gutter) motion:top-20 md:motion:top-24">
           <div className="flex items-baseline justify-between gap-6">

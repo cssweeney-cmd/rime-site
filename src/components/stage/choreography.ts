@@ -62,9 +62,9 @@ export const HERO: Record<Layout, Poses> = {
     gloves: P(2.5, -0.5, 0, 0.1, -0.32, -0.18, 0.98, 0.25),
   },
   tall: {
-    beanie: P(0, 0.72, 0.6, 0.16, -0.3, 0.08, 0.8),
-    neck: P(-0.6, -0.42, -0.4, 0.42, 0.4, 0.2, 0.56),
-    gloves: P(0.62, -0.4, 0, 0.1, -0.3, -0.16, 0.56, 0.2),
+    beanie: P(0, 0.86, 0.6, 0.16, -0.3, 0.08, 0.6),
+    neck: P(-0.6, -0.02, -0.4, 0.42, 0.4, 0.2, 0.44),
+    gloves: P(0.6, 0.02, 0, 0.1, -0.3, -0.16, 0.44, 0.2),
   },
 };
 
@@ -76,13 +76,13 @@ export const HERO_SIDE_SHARE = { wide: 0.57, tall: 0.54 } as const;
  * (beanie on top, neck warmer under it, gloves below).
  */
 const ASSEMBLY: Record<Layout, { y: number; scale: number }> = {
-  wide: { y: 0, scale: 0.8 },
+  wide: { y: 0.0, scale: 0.93 },
   tall: { y: 1.02, scale: 0.44 },
 };
 const SLOT: Poses = {
-  beanie: P(0, 1.32, 0, 0.12, 0, 0, 1),
+  beanie: P(0, 1.14, 0, 0.12, 0, 0, 1),
   neck: P(0, 0.0, 0, 0.3, 0, 0, 1),
-  gloves: P(0, -1.42, 0.3, 0.05, 0, 0, 1, 1),
+  gloves: P(0, -1.3, 0.3, 0.05, 0, 0, 1, 1),
 };
 
 /** Scroll progress windows inside the pinned bundle section. */

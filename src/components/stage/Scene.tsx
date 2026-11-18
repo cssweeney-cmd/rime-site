@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
+import { NeutralToneMapping } from "three";
 import type * as THREE from "three";
 import { site, type Colorway, type PieceId } from "@/config/site";
 import {
@@ -104,13 +105,19 @@ export default function Scene({ colorway, active, coarse, onReady }: SceneProps)
     <Canvas
       dpr={[1, coarse ? 1.5 : 2]}
       camera={{ fov: CAMERA_FOV, position: [0, 0, CAMERA_Z], near: 0.1, far: 40 }}
-      gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+      gl={{
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance",
+        // Neutral tone mapping keeps product colors true to the swatches.
+        toneMapping: NeutralToneMapping,
+      }}
       frameloop={active ? "always" : "never"}
       style={{ pointerEvents: "none" }}
     >
-      <ambientLight intensity={0.6} color="#b9cbe6" />
+      <ambientLight intensity={1.05} color="#c9d6ea" />
       {/* Cold key from the upper left. */}
-      <directionalLight position={[-4, 6, 6]} intensity={2.4} color="#eef4ff" />
+      <directionalLight position={[-4, 6, 6]} intensity={3.1} color="#f2f6ff" />
       {/* Accent rim from behind, the one warm note in the scene. */}
       <directionalLight position={[5, 1.5, -3.5]} intensity={3.4} color={site.theme.colors.accent} />
       {/* Soft blue fill from below. */}

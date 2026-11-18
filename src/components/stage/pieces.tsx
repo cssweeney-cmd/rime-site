@@ -31,16 +31,16 @@ function makeKnitCanvas(): HTMLCanvasElement {
   const w = size / ribs;
   for (let i = 0; i < ribs; i++) {
     const g = ctx.createLinearGradient(i * w, 0, (i + 1) * w, 0);
-    g.addColorStop(0, "#5c5c5c");
-    g.addColorStop(0.22, "#d8d8d8");
+    g.addColorStop(0, "#858585");
+    g.addColorStop(0.22, "#e6e6e6");
     g.addColorStop(0.5, "#ffffff");
-    g.addColorStop(0.78, "#d8d8d8");
-    g.addColorStop(1, "#5c5c5c");
+    g.addColorStop(0.78, "#e6e6e6");
+    g.addColorStop(1, "#858585");
     ctx.fillStyle = g;
     ctx.fillRect(i * w, 0, w, size);
   }
   // Stitch chevrons along each rib.
-  ctx.strokeStyle = "rgba(0,0,0,0.22)";
+  ctx.strokeStyle = "rgba(0,0,0,0.16)";
   ctx.lineWidth = 3;
   ctx.lineCap = "round";
   const rows = 8;

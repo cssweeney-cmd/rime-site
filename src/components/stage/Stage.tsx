@@ -12,7 +12,12 @@ import { stageState } from "./store";
 // and never blocks first paint.
 const Scene = dynamic(() => import("./Scene"), { ssr: false });
 
-const FIRST_INTERACTION = ["touchstart", "pointerdown", "keydown", "scroll"] as const;
+const FIRST_INTERACTION = [
+  "touchstart",
+  "pointerdown",
+  "keydown",
+  "scroll",
+] as const;
 
 /**
  * The product stage behind the hero and bundle sections.
@@ -41,7 +46,8 @@ export function Stage() {
     FIRST_INTERACTION.forEach((type) =>
       window.addEventListener(type, go, { once: true, passive: true }),
     );
-    return () => FIRST_INTERACTION.forEach((type) => window.removeEventListener(type, go));
+    return () =>
+      FIRST_INTERACTION.forEach((type) => window.removeEventListener(type, go));
   }, [waitForTouch]);
 
   useEffect(() => {
@@ -57,35 +63,43 @@ export function Stage() {
   useEffect(() => {
     const el = root.current;
     if (!el) return;
-    const io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting));
+    const io = new IntersectionObserver(([entry]) =>
+      setInView(entry.isIntersecting),
+    );
     io.observe(el);
     return () => io.disconnect();
   }, []);
 
   return (
+    // The outer box spans the whole hero + bundle zone; the inner one sticks to
+    // the viewport inside it, so the stage scrolls away exactly when the zone ends.
     <div
-      ref={root}
       aria-hidden="true"
-      className="pointer-events-none absolute inset-x-0 top-0 z-10 h-lvh motion:sticky motion:-mb-[100lvh]"
+      className="pointer-events-none absolute inset-0 z-10"
     >
-      <div className="stage-in absolute inset-0">
-        <div
-          className={`absolute inset-0 transition-opacity duration-700 ${ready ? "opacity-0" : "opacity-100"}`}
-        >
-          <LayeredProducts colorway={colorway.id} active={motion && inView && !ready} />
-        </div>
-        {want3d && (
+      <div ref={root} className="relative h-lvh motion:sticky motion:top-0">
+        <div className="stage-in absolute inset-0">
           <div
-            className={`absolute inset-0 transition-opacity duration-700 ${ready ? "opacity-100" : "opacity-0"}`}
+            className={`absolute inset-0 transition-opacity duration-700 ${ready ? "opacity-0" : "opacity-100"}`}
           >
-            <Scene
-              colorway={colorway}
-              active={inView}
-              coarse={!fine}
-              onReady={() => setReady(true)}
+            <LayeredProducts
+              colorway={colorway.id}
+              active={motion && inView && !ready}
             />
           </div>
-        )}
+          {want3d && (
+            <div
+              className={`absolute inset-0 transition-opacity duration-700 ${ready ? "opacity-100" : "opacity-0"}`}
+            >
+              <Scene
+                colorway={colorway}
+                active={inView}
+                coarse={!fine}
+                onReady={() => setReady(true)}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -188,14 +188,16 @@ function knitTile(c: Colorway) {
     1250,
     `${backdrop("t", p.light)}
     <defs>
-      <pattern id="k" width="120" height="92" patternUnits="userSpaceOnUse" patternTransform="rotate(-8 500 625)">
-        <rect width="120" height="92" fill="${p.shade}"/>
-        <path d="M 10 -40 Q 34 20 56 52" fill="none" stroke="${p.base}" stroke-width="40" stroke-linecap="round"/>
-        <path d="M 110 -40 Q 86 20 64 52" fill="none" stroke="${p.base}" stroke-width="40" stroke-linecap="round"/>
-        <path d="M 10 52 Q 34 112 56 144" fill="none" stroke="${p.base}" stroke-width="40" stroke-linecap="round"/>
-        <path d="M 110 52 Q 86 112 64 144" fill="none" stroke="${p.base}" stroke-width="40" stroke-linecap="round"/>
-        <path d="M 16 -30 Q 34 16 50 40" fill="none" stroke="${p.light}" stroke-opacity="0.55" stroke-width="6" stroke-linecap="round"/>
-        <path d="M 16 62 Q 34 108 50 132" fill="none" stroke="${p.light}" stroke-opacity="0.55" stroke-width="6" stroke-linecap="round"/>
+      <pattern id="k" width="112" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(-6 500 625)">
+        <rect width="112" height="60" fill="${p.base}"/>
+        ${[-60, 0, 60]
+          .map(
+            (dy) => `
+        <path d="M 56 ${dy + 64} L 22 ${dy + 4} M 56 ${dy + 64} L 90 ${dy + 4}" fill="none" stroke="${p.shade}" stroke-opacity="0.55" stroke-width="7" stroke-linecap="round"/>
+        <path d="M 50 ${dy + 62} L 18 ${dy + 6}" fill="none" stroke="${p.light}" stroke-opacity="0.6" stroke-width="3" stroke-linecap="round"/>`,
+          )
+          .join("")}
+        <path d="M 0 0 V 60 M 112 0 V 60" stroke="${p.shade}" stroke-opacity="0.5" stroke-width="9"/>
       </pattern>
       <linearGradient id="kl" x1="0" y1="0" x2="1" y2="1">
         <stop offset="0" stop-color="#fff" stop-opacity="0.18"/>

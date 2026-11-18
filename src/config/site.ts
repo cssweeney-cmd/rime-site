@@ -183,7 +183,7 @@ export const site = {
       index: "01",
       name: "The Beanie",
       benefit: "Warmth that stays put.",
-      body: "A close rib knit with a deep fold-over cuff. Pull it down over your ears and forget it's there.",
+      body: "A close rib knit with a deep fold-over cuff. Pull it down over your ears and forget it’s there.",
       tags: ["Rib knit", "Fold-over cuff", "One size"],
       alt: "Rib-knit beanie with a fold-over cuff",
       images: {
@@ -368,7 +368,7 @@ export const site = {
 
   finalCta: {
     eyebrow: "Last call before the cold",
-    title: ["Winter", "doesn't wait."],
+    title: ["Winter", "doesn’t wait."],
     sub: `The full set for ${price}.`,
   },
 
@@ -379,7 +379,7 @@ export const site = {
       placeholder: "Email address",
       button: "Sign up",
       /** UI only: nothing is sent anywhere yet. */
-      success: "You're on the list.",
+      success: "You’re on the list.",
       error: "Enter a valid email address.",
     },
     links: [
