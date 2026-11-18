@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1250" width="1000" height="1250">
+<defs>
+<linearGradient id="t-bg" x1="0" y1="0" x2="0.4" y2="1">
+<stop offset="0" stop-color="#161c24"/>
+<stop offset="1" stop-color="#0d1117"/>
+</linearGradient>
+<radialGradient id="t-glow" cx="0.5" cy="0.42" r="0.6">
+<stop offset="0" stop-color="#7d93ab" stop-opacity="0.22"/>
+<stop offset="1" stop-color="#7d93ab" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="t-vig" cx="0.5" cy="0.5" r="0.75">
+<stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+<stop offset="1" stop-color="#000" stop-opacity="0.55"/>
+</radialGradient>
+</defs>
+<rect width="1000" height="1250" fill="url(#t-bg)"/>
+<rect width="1000" height="1250" fill="url(#t-glow)"/>
+<defs>
+<pattern id="k" width="120" height="92" patternUnits="userSpaceOnUse" patternTransform="rotate(-8 500 625)">
+<rect width="120" height="92" fill="#27313e"/>
+<path d="M 10 -40 Q 34 20 56 52" fill="none" stroke="#51647a" stroke-width="40" stroke-linecap="round"/>
+<path d="M 110 -40 Q 86 20 64 52" fill="none" stroke="#51647a" stroke-width="40" stroke-linecap="round"/>
+<path d="M 10 52 Q 34 112 56 144" fill="none" stroke="#51647a" stroke-width="40" stroke-linecap="round"/>
+<path d="M 110 52 Q 86 112 64 144" fill="none" stroke="#51647a" stroke-width="40" stroke-linecap="round"/>
+<path d="M 16 -30 Q 34 16 50 40" fill="none" stroke="#7d93ab" stroke-opacity="0.55" stroke-width="6" stroke-linecap="round"/>
+<path d="M 16 62 Q 34 108 50 132" fill="none" stroke="#7d93ab" stroke-opacity="0.55" stroke-width="6" stroke-linecap="round"/>
+</pattern>
+<linearGradient id="kl" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#fff" stop-opacity="0.18"/>
+<stop offset="0.5" stop-color="#000" stop-opacity="0"/>
+<stop offset="1" stop-color="#000" stop-opacity="0.5"/>
+</linearGradient>
+</defs>
+<rect x="-100" y="-100" width="1200" height="1450" fill="url(#k)"/>
+<rect width="1000" height="1250" fill="url(#kl)"/>
+<rect width="1000" height="1250" fill="url(#t-vig)"/>
+<g font-family="ui-monospace, Menlo, Consolas, monospace" font-size="20" letter-spacing="3" fill="#e9eff4" fill-opacity="0.55">
+<text x="48" y="1202">PLACEHOLDER / KNIT CLOSE-UP / 4:5</text>
+<text x="952" y="66" text-anchor="end">SLATE</text>
+</g></svg>

@@ -1,26 +1,345 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+ * `motion:`  applies only when JS is running and the visitor has not asked
+ *            for reduced motion (the class is set by an inline script in
+ *            layout.tsx before first paint).
+ * `fine:`    applies only on devices with a real mouse or trackpad.
+ */
+@custom-variant motion (html.motion &);
+@custom-variant fine (@media (hover: hover) and (pointer: fine));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Colors come from src/config/site.ts (injected on <html> in layout.tsx). */
+  --color-ink: var(--c-ink);
+  --color-ink-2: var(--c-ink-2);
+  --color-ink-3: var(--c-ink-3);
+  --color-frost: var(--c-frost);
+  --color-mute: var(--c-mute);
+  --color-line: var(--c-line);
+  --color-accent: var(--c-accent);
+  --color-accent-ink: var(--c-accent-ink);
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-archivo), "Arial Narrow", Impact, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, Menlo, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  /* One stage unit. The 3D camera sees 5.0447 units of height, so the layered
+     image fallback uses the same unit to match the 3D framing. */
+  --u: calc(100lvh / 5.0447);
+  /* Length of the page-load intro. Hero entrances are timed against it. */
+  --intro: 0s;
+  --gutter: clamp(1.25rem, 4vw, 3.5rem);
+  color-scheme: dark;
+}
+
+html.motion {
+  --intro: 1.15s;
+}
+
+html {
+  background: var(--c-ink);
+  -webkit-text-size-adjust: 100%;
+  scrollbar-color: color-mix(in srgb, var(--c-frost) 25%, transparent) var(--c-ink);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--c-ink);
+  color: var(--c-frost);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--c-accent);
+  color: var(--c-accent-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Type                                                                */
+/* ------------------------------------------------------------------ */
+
+.display {
+  font-family: var(--font-display);
+  font-stretch: 62%;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.86;
+  letter-spacing: -0.005em;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.text-hero {
+  font-size: clamp(3.25rem, 11vw, 9.5rem);
+}
+.text-section {
+  font-size: clamp(3rem, 9.5vw, 8.5rem);
+}
+.text-panel {
+  font-size: clamp(2.5rem, 6.2vw, 5.75rem);
+}
+
+/* ------------------------------------------------------------------ */
+/* Scroll reveals (driven by RevealController)                         */
+/* ------------------------------------------------------------------ */
+
+html.motion [data-reveal="fade"] {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+}
+html.motion [data-reveal="lines"] {
+  visibility: hidden;
+}
+html.motion [data-reveal="clip"] {
+  clip-path: inset(100% 0 0 0);
+}
+.split-line-mask {
+  overflow: clip;
+  /* Room for descenders inside the mask without shifting the layout. */
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+/* ------------------------------------------------------------------ */
+/* Page-load intro (pure CSS so it never waits on hydration)           */
+/* ------------------------------------------------------------------ */
+
+.intro {
+  display: none;
+}
+html.motion .intro {
+  display: grid;
+  animation: intro-out 0.6s var(--ease-in-out-quart) 0.8s forwards;
+}
+html.motion .intro-letter {
+  display: inline-block;
+  transform: translate3d(0, 110%, 0);
+  animation: intro-letter 0.6s var(--ease-out-expo) forwards;
+  animation-delay: calc(var(--i) * 55ms + 60ms);
+}
+html.motion .intro-bar {
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: intro-bar 0.75s var(--ease-in-out-quart) 0.05s forwards;
+}
+
+@keyframes intro-letter {
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes intro-bar {
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes intro-out {
+  to {
+    clip-path: inset(0 0 100% 0);
+    visibility: hidden;
+  }
+}
+
+/* Hero entrances, timed to start as the intro lifts. */
+html.motion .rise {
+  opacity: 0;
+  animation: rise 1s var(--ease-out-expo) forwards;
+  animation-delay: calc(var(--intro) + var(--d, 0s));
+}
+html.motion .rise-mask {
+  display: block;
+  overflow: clip;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+html.motion .rise-mask > span {
+  display: block;
+  transform: translate3d(0, 108%, 0);
+  animation: rise-line 1.1s var(--ease-out-expo) forwards;
+  animation-delay: calc(var(--intro) + var(--d, 0s));
+}
+html.motion .stage-in {
+  opacity: 0;
+  animation: stage-in 1.4s var(--ease-out-expo) forwards;
+  animation-delay: calc(var(--intro) - 0.15s);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes rise-line {
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes stage-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 6%, 0) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Stage: layered image fallback                                       */
+/* ------------------------------------------------------------------ */
+
+.stage-piece {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--u) * var(--w));
+  margin-left: calc(var(--u) * var(--w) / -2);
+  margin-top: calc(var(--u) * var(--w) / -2);
+  aspect-ratio: 1;
+  /* Server-rendered resting pose. JS takes over `transform` when motion is on. */
+  --x: var(--x-t);
+  --y: var(--y-t);
+  --r: var(--r-t);
+  --s: var(--s-t);
+  /* --x is a length (capped in vw), --y is in stage units, --r in radians. */
+  transform: translate3d(var(--x), calc(var(--u) * var(--y) * -1), 0)
+    rotate(calc(var(--r) * -1rad)) scale(var(--s));
+  will-change: transform;
+}
+@media (min-aspect-ratio: 9/10) {
+  .stage-piece {
+    --x: var(--x-w);
+    --y: var(--y-w);
+    --r: var(--r-w);
+    --s: var(--s-w);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Atmosphere                                                          */
+/* ------------------------------------------------------------------ */
+
+.grain {
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.085;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.1 -0.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+}
+@media (hover: hover) and (pointer: fine) {
+  html.motion .grain {
+    animation: grain 0.9s steps(6) infinite;
+  }
+}
+@keyframes grain {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  20% {
+    transform: translate3d(-3%, 4%, 0);
+  }
+  40% {
+    transform: translate3d(4%, -2%, 0);
+  }
+  60% {
+    transform: translate3d(-2%, -4%, 0);
+  }
+  80% {
+    transform: translate3d(3%, 3%, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.glow-cold {
+  background: radial-gradient(
+    60% 55% at 50% 45%,
+    color-mix(in srgb, #6fa8dc 22%, transparent) 0%,
+    transparent 70%
+  );
+}
+.glow-accent {
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    color-mix(in srgb, var(--c-accent) 26%, transparent) 0%,
+    transparent 70%
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Custom cursor (fine pointers only, added by <Cursor />)             */
+/* ------------------------------------------------------------------ */
+
+html.has-cursor,
+html.has-cursor * {
+  cursor: none !important;
+}
+
+/* ------------------------------------------------------------------ */
+/* Marquee                                                             */
+/* ------------------------------------------------------------------ */
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+}
+html.motion .marquee-track {
+  animation: marquee 28s linear infinite;
+}
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Reduced motion: belt and braces on top of the `motion` gate         */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Without JavaScript the FAQ answers are simply all open. */
+html:not(.js) .faq-panel {
+  height: auto !important;
+  opacity: 1 !important;
 }

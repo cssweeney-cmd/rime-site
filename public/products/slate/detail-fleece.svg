@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1250" width="1000" height="1250">
+<defs>
+<linearGradient id="t-bg" x1="0" y1="0" x2="0.4" y2="1">
+<stop offset="0" stop-color="#161c24"/>
+<stop offset="1" stop-color="#0d1117"/>
+</linearGradient>
+<radialGradient id="t-glow" cx="0.5" cy="0.42" r="0.6">
+<stop offset="0" stop-color="#7d93ab" stop-opacity="0.22"/>
+<stop offset="1" stop-color="#7d93ab" stop-opacity="0"/>
+</radialGradient>
+<radialGradient id="t-vig" cx="0.5" cy="0.5" r="0.75">
+<stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+<stop offset="1" stop-color="#000" stop-opacity="0.55"/>
+</radialGradient>
+</defs>
+<rect width="1000" height="1250" fill="url(#t-bg)"/>
+<rect width="1000" height="1250" fill="url(#t-glow)"/>
+<defs>
+<filter id="fz" x="0" y="0" width="100%" height="100%">
+<feTurbulence type="fractalNoise" baseFrequency="0.035 0.05" numOctaves="4" seed="7" result="n"/>
+<feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.9 0.6 0 0 -0.45"/>
+</filter>
+<filter id="fg" x="0" y="0" width="100%" height="100%">
+<feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="3" result="n"/>
+<feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 -0.35"/>
+</filter>
+<linearGradient id="fl" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#fff" stop-opacity="0.12"/>
+<stop offset="1" stop-color="#000" stop-opacity="0.45"/>
+</linearGradient>
+</defs>
+<rect width="1000" height="1250" fill="#cfd8e2"/>
+<rect width="1000" height="1250" filter="url(#fz)" opacity="0.5"/>
+<rect width="1000" height="1250" filter="url(#fg)" opacity="0.35"/>
+<rect width="1000" height="1250" fill="url(#fl)"/>
+<rect width="1000" height="1250" fill="url(#t-vig)"/>
+<g font-family="ui-monospace, Menlo, Consolas, monospace" font-size="20" letter-spacing="3" fill="#e9eff4" fill-opacity="0.55">
+<text x="48" y="1202">PLACEHOLDER / FLEECE CLOSE-UP / 4:5</text>
+<text x="952" y="66" text-anchor="end">SLATE</text>
+</g></svg>
