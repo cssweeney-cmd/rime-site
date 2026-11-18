@@ -57,10 +57,13 @@ export function Hero() {
         className="absolute inset-x-0 top-[13%] flex justify-center md:top-1/2 md:-translate-y-[56%]"
       >
         <div data-hero-wordmark className="will-change-transform">
-          <span className="rise-mask display block leading-[0.8] select-none" style={{ fontSize: wordmarkSize }}>
-            <span className="block bg-gradient-to-b from-frost to-frost/55 bg-clip-text text-transparent">
-              {brand.name}
-            </span>
+          {/* Visible from the very first paint (it is the largest thing on
+              screen), then settles into place as the intro lifts. */}
+          <span
+            className="wordmark-in display block leading-[0.8] text-frost select-none [mask-image:linear-gradient(#000,rgb(0_0_0/0.55))]"
+            style={{ fontSize: wordmarkSize }}
+          >
+            {brand.name}
           </span>
         </div>
       </div>

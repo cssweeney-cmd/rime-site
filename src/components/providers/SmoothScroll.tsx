@@ -3,16 +3,19 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import { motionOk } from "@/lib/env";
+import { FINE_POINTER, motionOk } from "@/lib/env";
 
 /**
  * Lenis smooth scrolling, driven by the GSAP ticker so scroll position and
- * ScrollTrigger animations update in the same frame. Skipped entirely when
- * the visitor prefers reduced motion (native scrolling stays in charge).
+ * ScrollTrigger animations update in the same frame.
+ *
+ * Only runs for mouse and trackpad users. Touch devices already scroll
+ * smoothly on the compositor thread, so they keep native scrolling (and skip
+ * the per-frame work). Skipped entirely with reduced motion.
  */
 export function SmoothScroll() {
   useEffect(() => {
-    if (!motionOk()) return;
+    if (!motionOk() || !window.matchMedia(FINE_POINTER).matches) return;
 
     const lenis = new Lenis({ autoRaf: false, anchors: true, lerp: 0.11 });
     lenis.on("scroll", ScrollTrigger.update);
@@ -20,13 +23,7 @@ export function SmoothScroll() {
     gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
 
-    // Fonts and images can shift layout after first paint.
-    const refresh = () => ScrollTrigger.refresh();
-    document.fonts?.ready.then(refresh).catch(() => {});
-    window.addEventListener("load", refresh, { once: true });
-
     return () => {
-      window.removeEventListener("load", refresh);
       gsap.ticker.remove(raf);
       lenis.destroy();
     };

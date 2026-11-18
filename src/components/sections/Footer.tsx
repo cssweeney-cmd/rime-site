@@ -44,7 +44,7 @@ export function Footer() {
 
       <div
         aria-hidden="true"
-        className="display mt-16 text-center text-[clamp(6rem,34vw,34rem)] leading-[0.74] text-frost/[0.07] select-none md:mt-24"
+        className="display mt-16 bg-gradient-to-b from-frost/[0.13] to-frost/[0.02] bg-clip-text text-center text-[clamp(6rem,34vw,34rem)] leading-[0.74] text-transparent select-none md:mt-24"
       >
         {brand.name}
       </div>

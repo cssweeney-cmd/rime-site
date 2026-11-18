@@ -21,7 +21,7 @@ export function Intro() {
             </span>
           ))}
         </div>
-        <div className="mt-5 h-px w-full bg-line">
+        <div className="mt-5 h-0.5 w-full bg-line">
           <div className="intro-bar h-full bg-accent" />
         </div>
         <div className="eyebrow mt-3 flex justify-between text-mute">

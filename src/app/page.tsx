@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { ColorwayProvider } from "@/components/providers/ColorwayProvider";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { Header } from "@/components/Header";
@@ -40,14 +41,26 @@ export default function Page() {
           <Bundle />
         </div>
         <Marquee />
-        <Details />
+        {/* Suspense boundaries let React hydrate the below-the-fold sections
+            in separate, interruptible chunks instead of one long task. */}
+        <Suspense>
+          <Details />
+        </Suspense>
         <Reviews />
-        <Faq />
-        <FinalCta />
+        <Suspense>
+          <Faq />
+        </Suspense>
+        <Suspense>
+          <FinalCta />
+        </Suspense>
       </main>
 
-      <Footer />
-      <StickyBuy />
+      <Suspense>
+        <Footer />
+      </Suspense>
+      <Suspense>
+        <StickyBuy />
+      </Suspense>
       <RevealController />
     </ColorwayProvider>
   );

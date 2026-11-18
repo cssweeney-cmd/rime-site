@@ -31,20 +31,3 @@ export function useMediaQuery(query: string): boolean {
 }
 
 export const FINE_POINTER = "(hover: hover) and (pointer: fine)";
-
-let webgl: boolean | null = null;
-function detectWebgl(): boolean {
-  if (webgl !== null) return webgl;
-  try {
-    const canvas = document.createElement("canvas");
-    webgl = Boolean(canvas.getContext("webgl2") ?? canvas.getContext("webgl"));
-  } catch {
-    webgl = false;
-  }
-  return webgl;
-}
-
-/** True once we know the browser can create a WebGL context. */
-export function useWebgl(): boolean {
-  return useSyncExternalStore(noop, detectWebgl, () => false);
-}

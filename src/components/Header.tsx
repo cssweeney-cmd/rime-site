@@ -1,28 +1,33 @@
 "use client";
 
-import { useRef, type CSSProperties } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import { site } from "@/config/site";
-import { ScrollTrigger, useGSAP } from "@/lib/gsap";
-import { motionOk } from "@/lib/env";
 import { checkoutLinkProps } from "@/components/ui/CtaButton";
 
-/** Fixed header. Slides away when scrolling down, returns when scrolling up. */
+/**
+ * Fixed header. Slides away when scrolling down, returns when scrolling up,
+ * and picks up a blurred backdrop once the page has scrolled.
+ */
 export function Header() {
   const ref = useRef<HTMLElement>(null);
 
-  useGSAP(() => {
+  useEffect(() => {
     const el = ref.current;
-    if (!el || !motionOk()) return;
-    ScrollTrigger.create({
-      start: 0,
-      end: "max",
-      onUpdate: (self) => {
-        const y = self.scroll();
-        el.dataset.hidden = self.direction === 1 && y > 500 ? "true" : "false";
-        el.dataset.scrolled = y > 40 ? "true" : "false";
-      },
-    });
-  });
+    if (!el) return;
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      // Ignore sub-pixel jitter so the bar does not flicker.
+      if (Math.abs(y - last) > 4) {
+        el.dataset.hidden = y > last && y > 500 ? "true" : "false";
+        last = y;
+      }
+      el.dataset.scrolled = y > 40 ? "true" : "false";
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <header
@@ -31,7 +36,7 @@ export function Header() {
     >
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-b from-ink/85 to-transparent opacity-0 transition-opacity duration-500 group-data-[scrolled=true]:opacity-100"
+        className="absolute inset-0 border-b border-line bg-ink/75 opacity-0 backdrop-blur-md transition-opacity duration-500 group-data-[scrolled=true]:opacity-100"
       />
       <div
         className="rise relative flex items-center justify-between px-(--gutter) py-4 md:py-5"

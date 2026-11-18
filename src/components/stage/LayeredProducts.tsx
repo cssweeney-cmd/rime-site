@@ -67,9 +67,17 @@ export function LayeredProducts({
     const current = makePoses();
     let primed = false;
 
+    // Measure on resize only. Reading layout inside the frame loop would
+    // force a reflow every frame.
+    let width = el.clientWidth;
+    let height = el.clientHeight;
+    const ro = new ResizeObserver(([entry]) => {
+      width = entry.contentRect.width;
+      height = entry.contentRect.height;
+    });
+    ro.observe(el);
+
     const tick = (time: number, deltaMs: number) => {
-      const width = el.clientWidth;
-      const height = el.clientHeight;
       if (!width || !height) return;
       const unit = height / VIEW_HEIGHT;
       computePoses(
@@ -96,6 +104,7 @@ export function LayeredProducts({
     gsap.ticker.add(tick);
     return () => {
       gsap.ticker.remove(tick);
+      ro.disconnect();
     };
   }, [active]);
 

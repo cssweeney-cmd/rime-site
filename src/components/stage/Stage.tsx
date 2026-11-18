@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Component, useEffect, useRef, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { site } from "@/config/site";
-import { FINE_POINTER, useMediaQuery, useMotionOk, useWebgl } from "@/lib/env";
+import { FINE_POINTER, useMediaQuery, useMotionOk } from "@/lib/env";
 import { useColorway } from "@/components/providers/ColorwayProvider";
 import { LayeredProducts } from "./LayeredProducts";
 import { stageState } from "./store";
@@ -20,23 +20,41 @@ const FIRST_INTERACTION = [
 ] as const;
 
 /**
+ * Catches a failed 3D start (no WebGL, lost context, blocked GPU) so the page
+ * simply stays on the layered images. We deliberately do not probe for WebGL
+ * up front: creating a throwaway context can block the main thread for
+ * hundreds of milliseconds on slower devices.
+ */
+class SceneBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  componentDidCatch(error: unknown) {
+    console.warn("[stage] 3D is unavailable, staying on the layered images.", error);
+  }
+  render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
+
+/**
  * The product stage behind the hero and bundle sections.
  *
  * It always server-renders the layered product images. Then, when motion is
- * allowed and WebGL works, it loads the 3D scene and crossfades to it:
+ * allowed, it loads the 3D scene and crossfades to it once it has drawn:
  * right away on desktop, after the first touch or scroll on phones.
  */
 export function Stage() {
   const { colorway } = useColorway();
   const motion = useMotionOk();
   const fine = useMediaQuery(FINE_POINTER);
-  const webgl = useWebgl();
   const root = useRef<HTMLDivElement>(null);
   const [interacted, setInteracted] = useState(false);
   const [inView, setInView] = useState(true);
   const [ready, setReady] = useState(false);
 
-  const can3d = motion && webgl && site.stage.mode === "auto";
+  const can3d = motion && site.stage.mode === "auto";
   const waitForTouch = can3d && !fine && site.stage.mobile3d && !interacted;
   const want3d = can3d && (fine || (site.stage.mobile3d && interacted));
 
@@ -91,12 +109,14 @@ export function Stage() {
             <div
               className={`absolute inset-0 transition-opacity duration-700 ${ready ? "opacity-100" : "opacity-0"}`}
             >
-              <Scene
-                colorway={colorway}
-                active={inView}
-                coarse={!fine}
-                onReady={() => setReady(true)}
-              />
+              <SceneBoundary>
+                <Scene
+                  colorway={colorway}
+                  active={inView}
+                  coarse={!fine}
+                  onReady={() => setReady(true)}
+                />
+              </SceneBoundary>
             </div>
           )}
         </div>

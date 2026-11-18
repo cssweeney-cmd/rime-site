@@ -49,17 +49,17 @@ export const makePoses = (): Poses => ({
 
 /** Width of each layered image, in stage units, at scale 1. */
 export const IMAGE_WIDTH: Record<PieceId, number> = {
-  beanie: 2.75,
-  neck: 2.8,
-  gloves: 2.5,
+  beanie: 2.5,
+  neck: 2.45,
+  gloves: 2.2,
 };
 
 /** Hero: a loose floating cluster around the wordmark. */
 export const HERO: Record<Layout, Poses> = {
   wide: {
     beanie: P(0, 0.12, 0.8, 0.16, -0.38, 0.1, 1.22),
-    neck: P(-2.55, -0.62, -0.5, 0.42, 0.45, 0.24, 0.98),
-    gloves: P(2.5, -0.5, 0, 0.1, -0.32, -0.18, 0.98, 0.25),
+    neck: P(-2.55, -0.5, -0.5, 0.42, 0.45, 0.24, 0.98),
+    gloves: P(2.5, -0.4, 0, 0.1, -0.32, -0.18, 0.98, 0.25),
   },
   tall: {
     beanie: P(0, 0.86, 0.6, 0.16, -0.3, 0.08, 0.6),
